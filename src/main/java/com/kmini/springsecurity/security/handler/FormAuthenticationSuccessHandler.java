@@ -26,6 +26,7 @@ public class FormAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 
         setDefaultTargetUrl("/");
         SavedRequest savedRequest = requestCache.getRequest(request, response);
+
         if (savedRequest != null) {
             String targetUrl = savedRequest.getRedirectUrl();
             redirectStrategy.sendRedirect(request,response,targetUrl);

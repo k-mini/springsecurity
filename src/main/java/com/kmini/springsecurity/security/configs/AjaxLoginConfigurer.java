@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-public class AjaxLoginConfigure<H extends HttpSecurityBuilder<H>> extends
-        AbstractAuthenticationFilterConfigurer<H, AjaxLoginConfigure<H>, AjaxLoginProcessingFilter> {
+public class AjaxLoginConfigurer<H extends HttpSecurityBuilder<H>> extends
+        AbstractAuthenticationFilterConfigurer<H, AjaxLoginConfigurer<H>, AjaxLoginProcessingFilter> {
 
     private AuthenticationSuccessHandler successHandler;
     private AuthenticationFailureHandler failureHandler;
@@ -24,7 +24,7 @@ public class AjaxLoginConfigure<H extends HttpSecurityBuilder<H>> extends
     private AuthenticationEntryPoint authenticationEntryPoint;
     private AccessDeniedHandler accessDeniedHandler;
 
-    public AjaxLoginConfigure() {
+    public AjaxLoginConfigurer() {
         super(new AjaxLoginProcessingFilter(), null);
     }
 
@@ -42,8 +42,12 @@ public class AjaxLoginConfigure<H extends HttpSecurityBuilder<H>> extends
         getAuthenticationFilter().setAuthenticationManager(authenticationManager);
         getAuthenticationFilter().setAuthenticationSuccessHandler(successHandler);
         getAuthenticationFilter().setAuthenticationFailureHandler(failureHandler);
-        registerAuthenticationEntryPoint(http, authenticationEntryPoint);
-        registerAccessDeniedHandlerAjax(http, accessDeniedHandler);
+        if (authenticationEntryPoint != null) {
+            registerAuthenticationEntryPoint(http, authenticationEntryPoint);
+        }
+        if (accessDeniedHandler != null) {
+            registerAccessDeniedHandlerAjax(http, accessDeniedHandler);
+        }
 
         SessionAuthenticationStrategy sessionAuthenticationStrategy = http
                 .getSharedObject(SessionAuthenticationStrategy.class);
@@ -51,8 +55,7 @@ public class AjaxLoginConfigure<H extends HttpSecurityBuilder<H>> extends
             getAuthenticationFilter().setSessionAuthenticationStrategy(sessionAuthenticationStrategy);
         }
 
-        RememberMeServices rememberMeServices = http
-                .getSharedObject(RememberMeServices.class);
+        RememberMeServices rememberMeServices = http.getSharedObject(RememberMeServices.class);
         if (rememberMeServices != null) {
             getAuthenticationFilter().setRememberMeServices(rememberMeServices);
         }
@@ -68,26 +71,26 @@ public class AjaxLoginConfigure<H extends HttpSecurityBuilder<H>> extends
         }
     }
 
-    public AjaxLoginConfigure<H> successHandlerAjax(AuthenticationSuccessHandler successHandler) {
+    public AjaxLoginConfigurer<H> successHandlerAjax(AuthenticationSuccessHandler successHandler) {
         this.successHandler = successHandler;
         return this;
     }
 
-    public AjaxLoginConfigure<H> failureHandlerAjax(AuthenticationFailureHandler failureHandler) {
+    public AjaxLoginConfigurer<H> failureHandlerAjax(AuthenticationFailureHandler failureHandler) {
         this.failureHandler = failureHandler;
         return this;
     }
-    public AjaxLoginConfigure<H> authenticationManagerAjax(AuthenticationManager authenticationManager) {
+    public AjaxLoginConfigurer<H> setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         return this;
     }
 
-    public AjaxLoginConfigure<H> authenticationEntryPointAjax(AuthenticationEntryPoint authenticationEntryPoint) {
+    public AjaxLoginConfigurer<H> authenticationEntryPointAjax(AuthenticationEntryPoint authenticationEntryPoint) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         return this;
     }
 
-    public AjaxLoginConfigure<H> accessDeniedHandler(AccessDeniedHandler accessDeniedHandler) {
+    public AjaxLoginConfigurer<H> accessDeniedHandler(AccessDeniedHandler accessDeniedHandler) {
         this.accessDeniedHandler = accessDeniedHandler;
         return this;
     }

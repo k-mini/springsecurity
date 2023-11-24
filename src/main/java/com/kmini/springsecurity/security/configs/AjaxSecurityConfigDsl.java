@@ -48,10 +48,10 @@ public class AjaxSecurityConfigDsl {
                 .antMatchers("/api/messages").hasRole("MANAGER")
                 .anyRequest().authenticated()
                 .and()
-                .apply(new AjaxLoginConfigure<>())
+                .apply(new AjaxLoginConfigurer<>())
                 .successHandlerAjax(ajaxAuthenticationSuccessHandler())
                 .failureHandlerAjax(ajaxAuthenticationFailureHandler())
-                .authenticationManagerAjax(ajaxAuthenticationManager())
+                .setAuthenticationManager(ajaxAuthenticationManager())
                 .authenticationEntryPointAjax(ajaxAuthenticationEntryPoint())
                 .accessDeniedHandler(ajaxAccessDeniedHandler())
                 .loginProcessingUrl("/api/login");

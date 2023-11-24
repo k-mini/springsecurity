@@ -1,8 +1,8 @@
 package com.kmini.springsecurity.controller.user;
 
 
-import com.kmini.springsecurity.domain.Account;
-import com.kmini.springsecurity.domain.AccountDto;
+import com.kmini.springsecurity.domain.dto.AccountDto;
+import com.kmini.springsecurity.domain.entity.Account;
 import com.kmini.springsecurity.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

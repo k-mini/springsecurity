@@ -27,9 +27,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Order(0)
-@Configuration
-@EnableWebSecurity
+//@Order(0)
+//@Configuration
+//@EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
 public class AjaxSecurityConfig {

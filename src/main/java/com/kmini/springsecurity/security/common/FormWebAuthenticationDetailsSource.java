@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Slf4j
-public class FormAuthenticationDetailsSource implements AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> {
+public class FormWebAuthenticationDetailsSource implements AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> {
 
     @Override
     public WebAuthenticationDetails buildDetails(HttpServletRequest context) {

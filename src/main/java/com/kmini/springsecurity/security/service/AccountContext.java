@@ -1,6 +1,6 @@
 package com.kmini.springsecurity.security.service;
 
-import com.kmini.springsecurity.domain.Account;
+import com.kmini.springsecurity.domain.entity.Account;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

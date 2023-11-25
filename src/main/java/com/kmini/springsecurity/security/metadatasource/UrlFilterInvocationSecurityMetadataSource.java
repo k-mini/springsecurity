@@ -1,5 +1,6 @@
 package com.kmini.springsecurity.security.metadatasource;
 
+import com.kmini.springsecurity.service.SecurityResourceService;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -14,22 +15,27 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 
+    private SecurityResourceService securityResourceService;
+
+    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap,
+                                                     SecurityResourceService securityResourceService) {
+        this.requestMap = requestMap;
+        this.securityResourceService = securityResourceService;
+    }
+
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-
-        HttpServletRequest reqeust = ((FilterInvocation) object).getHttpRequest();
-
-        requestMap.put(new AntPathRequestMatcher("/mypage"), Arrays.asList(new SecurityConfig("ROLE_USER")));
+        HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
+//        requestMap.put(new AntPathRequestMatcher("/mypage"), Arrays.asList(new SecurityConfig("ROLE_USER")));
 
         if (requestMap != null) {
             for (Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
                 RequestMatcher matcher = entry.getKey();;
-                if (matcher.matches(reqeust)) {
+                if (matcher.matches(request)) {
                     return entry.getValue();
                 }
             }
         }
-
         return null;
     }
 
@@ -46,5 +52,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Override
     public boolean supports(Class<?> clazz) {
         return FilterInvocation.class.isAssignableFrom(clazz);
+    }
+
+    public void reload() {
+        this.requestMap = securityResourceService.getResourceList();
     }
 }

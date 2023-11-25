@@ -1,5 +1,6 @@
 package com.kmini.springsecurity.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,11 +27,12 @@ public class Account {
     private String email;
 
     @Column
-    private String age;
+    private int age;
 
     @Column
     private String password;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "account_roles", joinColumns = {@JoinColumn(name="account_id")},
             inverseJoinColumns = {@JoinColumn(name="role_id")} )

@@ -10,6 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +58,12 @@ public class UserServiceImpl implements UserService {
         }
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         userRepository.save(account);
+
+        List<GrantedAuthority> authorities = account.getUserRoles()
+                .stream().map(role->new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+        SecurityContextHolder.getContext()
+                .setAuthentication(UsernamePasswordAuthenticationToken
+                        .authenticated(account, null, authorities));
     }
 
     @Transactional

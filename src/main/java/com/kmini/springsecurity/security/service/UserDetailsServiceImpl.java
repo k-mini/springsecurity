@@ -1,6 +1,7 @@
 package com.kmini.springsecurity.security.service;
 
 import com.kmini.springsecurity.domain.entity.Account;
+import com.kmini.springsecurity.domain.entity.Role;
 import com.kmini.springsecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -32,9 +35,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         List<GrantedAuthority> collect = account.getUserRoles()
                 .stream()
-                .map(userRole -> userRole.getRoleName())
+                .map(Role::getRoleName)
                 .collect(Collectors.toSet())
-                .stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+                .stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         //List<GrantedAuthority> collect = userRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 //        List<GrantedAuthority> roles = new ArrayList<>();
 //        roles.add(new SimpleGrantedAuthority(account.getRole()));

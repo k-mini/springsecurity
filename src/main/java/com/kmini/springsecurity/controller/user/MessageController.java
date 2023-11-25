@@ -1,6 +1,7 @@
 package com.kmini.springsecurity.controller.user;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ public class MessageController {
 	@ResponseBody
 	@PostMapping("/api/messages")
 	public String apiMessage() {
-  		return "messages ok";
+		return " \"{ 'messages' : 'ok' }\" ";
+//  		return "{ 'messages' : 'ok' }";
 	}
 }

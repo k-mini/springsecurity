@@ -1,5 +1,6 @@
 package com.kmini.springsecurity.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class Role implements Serializable {
     @OrderBy("orderNum desc")
     private Set<Resources> resourcesSet = new LinkedHashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
     private Set<Account> accounts = new HashSet<>();
 

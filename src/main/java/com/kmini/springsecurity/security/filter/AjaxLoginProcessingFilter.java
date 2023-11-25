@@ -3,6 +3,7 @@ package com.kmini.springsecurity.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kmini.springsecurity.domain.dto.AccountDto;
 import com.kmini.springsecurity.security.token.AjaxAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,6 +35,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
         }
 
         AjaxAuthenticationToken authenticationToken = AjaxAuthenticationToken.unauthenticated(accountDto.getUsername(), accountDto.getPassword());
+        setDetails(request, authenticationToken);
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }
@@ -43,5 +45,9 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
             return true;
         }
         return false;
+    }
+
+    protected void setDetails(HttpServletRequest request, AjaxAuthenticationToken authRequest) {
+        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
     }
 }

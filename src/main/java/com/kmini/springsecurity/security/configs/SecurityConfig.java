@@ -9,6 +9,7 @@ import com.kmini.springsecurity.security.handler.FormAccessDeniedHandler;
 import com.kmini.springsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import com.kmini.springsecurity.security.provider.AjaxAuthenticationProvider;
 import com.kmini.springsecurity.security.provider.FormAuthenticationProvider;
+import com.kmini.springsecurity.security.voter.IpAddressVoter;
 import com.kmini.springsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -192,11 +193,15 @@ public class SecurityConfig {
 
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
         List<AccessDecisionVoter<?>> accessDecisionVoters = new ArrayList<>();
+        accessDecisionVoters.add(ipAddressVoter());
         accessDecisionVoters.add(roleHierarchyVoter());
         return accessDecisionVoters;
     }
 
-    @Bean
+    public IpAddressVoter ipAddressVoter() {
+        return new IpAddressVoter(securityResourceService);
+    }
+
     public AccessDecisionVoter<?> roleHierarchyVoter() {
         return new RoleHierarchyVoter(roleHierarchy());
     }

@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 @RequiredArgsConstructor
 public class FormAuthenticationProvider implements AuthenticationProvider {
@@ -35,7 +36,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
 //            throw new InsufficientAuthenticationException("secretKey 예외");
 //        }
 
-        return UsernamePasswordAuthenticationToken.authenticated(accountContext.getAccount(),null, accountContext.getAuthorities());
+        return UsernamePasswordAuthenticationToken.authenticated(accountContext.getAccount(), null, accountContext.getAuthorities());
     }
 
     @Override

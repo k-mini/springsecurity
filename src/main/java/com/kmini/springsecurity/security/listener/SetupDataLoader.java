@@ -1,13 +1,7 @@
 package com.kmini.springsecurity.security.listener;
 
-import com.kmini.springsecurity.domain.entity.Account;
-import com.kmini.springsecurity.domain.entity.Resources;
-import com.kmini.springsecurity.domain.entity.Role;
-import com.kmini.springsecurity.domain.entity.RoleHierarchy;
-import com.kmini.springsecurity.repository.ResourcesRepository;
-import com.kmini.springsecurity.repository.RoleHierarchyRepository;
-import com.kmini.springsecurity.repository.RoleRepository;
-import com.kmini.springsecurity.repository.UserRepository;
+import com.kmini.springsecurity.domain.entity.*;
+import com.kmini.springsecurity.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -29,8 +23,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ResourcesRepository resourcesRepository;
-    private final PasswordEncoder passwordEncoder;
     private final RoleHierarchyRepository roleHierarchyRepository;
+    private final AccessIpRepository accessIpRepository;
+    private final PasswordEncoder passwordEncoder;
     private static AtomicInteger count = new AtomicInteger(0);
 
     @Override
@@ -42,6 +37,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
 
         setupSecurityResources();
+
+        setupAccessIpData();
 
         alreadySetup = true;
     }
@@ -145,4 +142,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         RoleHierarchy childRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
     }
 
+    private void setupAccessIpData() {
+
+        AccessIp byIpAddress = accessIpRepository.findByIpAddress("127.0.0.1");
+        if (byIpAddress == null) {
+            AccessIp accessIp = AccessIp.builder()
+                    .ipAddress("127.0.0.1")
+                    .build();
+            accessIpRepository.save(accessIp);
+        }
+    }
 }

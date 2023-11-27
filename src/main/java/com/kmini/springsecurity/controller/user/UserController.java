@@ -5,9 +5,13 @@ import com.kmini.springsecurity.domain.dto.AccountDto;
 import com.kmini.springsecurity.domain.entity.Account;
 import com.kmini.springsecurity.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -19,11 +23,6 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@GetMapping(value="/mypage")
-	public String myPage() throws Exception {
-		return "user/mypage";
-	}
 
 	@GetMapping("/users")
 	public String createUser(){
@@ -39,5 +38,16 @@ public class UserController {
 		userService.createUser(account);
 
 		return "redirect:/";
+	}
+
+	@GetMapping(value="/mypage")
+	public String myPage() throws Exception {
+		return "user/mypage";
+	}
+
+	@GetMapping(value="/order")
+	public String order() throws Exception {
+		userService.order();
+		return "user/mypage";
 	}
 }

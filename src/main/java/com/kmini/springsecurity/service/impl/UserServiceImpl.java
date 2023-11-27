@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -88,5 +89,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Secured("ROLE_MANAGER")
+    public void order() {
+        System.out.println("order");
     }
 }

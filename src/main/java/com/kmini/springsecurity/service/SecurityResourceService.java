@@ -9,7 +9,6 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -34,6 +33,21 @@ public class SecurityResourceService {
                 configAttributeList.add(new SecurityConfig(role.getRoleName()));
             });
             result.put(new AntPathRequestMatcher(re.getResourceName()), configAttributeList);
+        });
+        return result;
+    }
+
+    public LinkedHashMap<String, List<ConfigAttribute>> getMethodResourceList() {
+
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resources> resourcesList = resourcesRepository.findAllMethodResources();
+
+        resourcesList.forEach(re ->{
+            List<ConfigAttribute> configAttributeList = new ArrayList<>();
+            re.getRoleSet().forEach(role->{
+                configAttributeList.add(new SecurityConfig(role.getRoleName()));
+            });
+            result.put(re.getResourceName(), configAttributeList);
         });
         return result;
     }

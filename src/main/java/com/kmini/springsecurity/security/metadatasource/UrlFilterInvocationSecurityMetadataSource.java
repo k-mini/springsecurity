@@ -30,7 +30,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
         if (requestMap != null) {
             for (Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
-                RequestMatcher matcher = entry.getKey();;
+                RequestMatcher matcher = entry.getKey();
                 if (matcher.matches(request)) {
                     return entry.getValue();
                 }

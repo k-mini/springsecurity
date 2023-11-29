@@ -183,9 +183,7 @@ public class SecurityConfig {
     }
 
     private UrlResourcesMapFactoryBean urlResourceMapFactoryBean() {
-        UrlResourcesMapFactoryBean urlResourcesMapFactoryBean = new UrlResourcesMapFactoryBean();
-        urlResourcesMapFactoryBean.setSecurityResourceService(securityResourceService);
-        return urlResourcesMapFactoryBean;
+        return new UrlResourcesMapFactoryBean(securityResourceService);
     }
 
     private AccessDecisionManager affirmativeBased() {

@@ -9,18 +9,18 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+public class MethodResourcesFactoryBean implements FactoryBean<LinkedHashMap<String, List<ConfigAttribute>>> {
 
-public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<RequestMatcher, List<ConfigAttribute>>> {
 
     private final SecurityResourceService securityResourceService;
-    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> resourceMap;
+    private LinkedHashMap<String, List<ConfigAttribute>> resourceMap;
 
-    public UrlResourcesMapFactoryBean(SecurityResourceService securityResourceService) {
+    public MethodResourcesFactoryBean(SecurityResourceService securityResourceService) {
         this.securityResourceService = securityResourceService;
     }
 
     @Override
-    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getObject() throws Exception {
+    public LinkedHashMap<String, List<ConfigAttribute>> getObject() {
 
         if (resourceMap == null) {
             init();
@@ -29,7 +29,7 @@ public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<Req
     }
 
     private void init() {
-        resourceMap = securityResourceService.getResourceList();
+        resourceMap = securityResourceService.getMethodResourceList();
     }
 
     @Override

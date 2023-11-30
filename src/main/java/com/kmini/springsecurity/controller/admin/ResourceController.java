@@ -5,6 +5,7 @@ import com.kmini.springsecurity.domain.entity.Resources;
 import com.kmini.springsecurity.domain.entity.Role;
 import com.kmini.springsecurity.repository.RoleRepository;
 import com.kmini.springsecurity.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
+import com.kmini.springsecurity.service.MethodSecurityService;
 import com.kmini.springsecurity.service.ResourcesService;
 import com.kmini.springsecurity.service.RoleService;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class ResourceController {
     private final RoleRepository roleRepository;
     private final RoleService roleService;
     private final UrlFilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+    private final MethodSecurityService methodSecurityService;
 
     @GetMapping("/admin/resources")
     public String getResources(Model model) throws Exception {
@@ -49,7 +51,11 @@ public class ResourceController {
         resources.setRoleSet(roles);
 
         resourcesService.createResources(resources);
-        filterInvocationSecurityMetadataSource.reload();
+        if ("url".equals(resourcesDto.getResourceType())) {
+            filterInvocationSecurityMetadataSource.reload();
+        } else {
+            methodSecurityService.addMethodSecured(resourcesDto.getResourceName(), resourcesDto.getRoleName());
+        }
         return "redirect:/admin/resources";
     }
 
@@ -87,8 +93,12 @@ public class ResourceController {
 
         Resources resources = resourcesService.getResources(Long.parseLong(id));
         resourcesService.deleteResources(Long.parseLong(id));
-        filterInvocationSecurityMetadataSource.reload();
 
+        if ("url".equals(resources.getResourceType())) {
+            filterInvocationSecurityMetadataSource.reload();
+        } else {
+            methodSecurityService.removeMethodSecured(resources.getResourceName());
+        }
         return "redirect:/admin/resources";
     }
 }
